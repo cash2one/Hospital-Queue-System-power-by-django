@@ -13,3 +13,7 @@ def read_post(request,id):
 	except news.DoesNotExist:
 		raise Http404
 	return render(request,'home/post.html',{'post_detail':post_detail})
+
+
+def about(request):
+	return render(request,'home/about.html')
