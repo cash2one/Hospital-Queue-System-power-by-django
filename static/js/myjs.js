@@ -4,7 +4,7 @@ $('#weibo').click(function(e){
 	e.preventDefault();
 	
     $me.grumble({
-		text: 'Whoaaa, this is a lot of text that i couldn\'t predict',
+		text: '我们的微博账号是',
 		angle: 20,
 		distance: 2,
 		showAfter: 0,
@@ -20,7 +20,7 @@ $('#weixin').click(function(e){
 	e.preventDefault();
 	
     $me.grumble({
-		text: 'Whoaaa, this is a lot of text that i couldn\'t predict',
+		text: '我们的公众微信平台是',
 		angle: 20,
 		distance: 3,
 		showAfter: 0,
@@ -36,7 +36,7 @@ $('#ambulance').click(function(e){
 	e.preventDefault();
 	
     $me.grumble({
-		text: 'Whoaaa, this is a lot of text that i couldn\'t predict',
+		text: '我们的紧急求助电话是',
 		angle: 20,
 		distance: 3,
 		showAfter: 0,
