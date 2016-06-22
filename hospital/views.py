@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from hospital.models import news,Doctor
+from hospital.models import news,Doctor,register_note
 from hospital.models import SignupForm
 from django.http import Http404
 from django.contrib.auth import authenticate, login,logout
@@ -49,7 +49,9 @@ def signup(request):
 
 
 def doctor_home(request):
-	return render(request,'doctor/index.html')
+	user = request.user.first_name
+	register_note_list=register_note.objects.filter(doctor=Doctor.objects.get(user=request.user))
+	return render(request,'doctor/index.html',{'register_note_list':register_note_list,'user':user})
 
 
 def logout_view(request):

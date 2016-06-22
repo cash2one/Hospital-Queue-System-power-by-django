@@ -21,11 +21,35 @@ class Doctor(models.Model):
 	workid = models.CharField(u'工号',max_length=10)
 	department = models.CharField(u'科室',max_length=11)
 	phonenumber = models.CharField(u'手机号',max_length=11)
-	def __unicode__(self):
-		return self.name
+	def __str__(self):
+		return '姓名'+self.name+'工号'+self.workid
 	class Meta:
 		verbose_name='医生'
 		verbose_name_plural='医生管理'
+
+class Patient(models.Model):
+	user = models.OneToOneField(User)
+	name = models.CharField(u'姓名',max_length=10)
+	gender=models.BooleanField(u'性别',null=False,default=True)
+	identifyid = models.CharField(u'身份证号',max_length=18)
+	phonenumber = models.CharField(u'手机号',max_length=11)
+	def __str__(self):
+		return '姓名'+self.name+'身份证号'+self.identifyid
+	class Meta:
+		verbose_name='患者'
+		verbose_name_plural='患者管理'
+
+class register_note(models.Model):
+	patient = models.ForeignKey(Patient)
+	doctor = models.ForeignKey(Doctor)
+	finish=models.BooleanField(u'完成挂诊',null=False,default=False)
+	time=models.DateField(u'日期',auto_now_add=True)
+	def __str__(self):
+		return self.patient.name
+	class Meta:
+		verbose_name='挂诊'
+		verbose_name_plural='挂诊管理'
+
 
 
 # my form

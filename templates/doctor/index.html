@@ -74,12 +74,14 @@
               </thead>
               <tbody>
                 
-                <tr>
-                  <td>1</td>
-                  <td>打我打</td>
-                  <td>june 6</td>
-                </tr>
 
+                {% for register_note in register_note_list %}
+                <tr>
+                  <td>{{ register_note.id }}</td>
+                  <td>{{ register_note.patient.name }}</td>
+                  <td>{{ register_note.time }}</td>
+                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
