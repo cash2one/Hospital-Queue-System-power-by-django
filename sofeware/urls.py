@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'', include('hospital.urls')),
     url(r'^markdown/', include( 'django_markdown.urls')),
     url(r'^forum/', include(board.urls)),
+    url(r'^accounts/', include('userena.urls')),
 )

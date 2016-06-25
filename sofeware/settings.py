@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
+ANONYMOUS_USER_ID=-1
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
@@ -25,13 +25,14 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
-
+SITE_ID = 1
 
 # Application definition
 from machina import get_apps as get_machina_apps
 INSTALLED_APPS = [
     'hospital',
     'suit',
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,11 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'django_markdown',
     'django_extensions',
+    'debug_toolbar',
+    'guardian',
+    'easy_thumbnails',
+    'userena',
+    'accounts',
 ] + get_machina_apps()
 
 
@@ -53,10 +59,27 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 
+AUTHENTICATION_BACKENDS = (
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'yourgmailaccount@gmail.com'
+EMAIL_HOST_PASSWORD = 'yourgmailpassword'
 
 
+AUTH_PROFILE_MODULE = 'accounts.MyProfile'
+
+USERENA_SIGNIN_REDIRECT_URL = '/accounts/%(username)s/'
+LOGIN_URL = '/accounts/signin/'
+LOGOUT_URL = '/accounts/signout/'
 
 SUIT_CONFIG = {
     'ADMIN_NAME': '医院挂号系统'
