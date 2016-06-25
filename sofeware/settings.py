@@ -28,8 +28,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
-INSTALLED_APPS = (
+from machina import get_apps as get_machina_apps
+INSTALLED_APPS = [
     'hospital',
     'suit',
     'django.contrib.admin',
@@ -38,12 +38,35 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mptt',
+    'haystack',
+    'widget_tweaks',
+    'django_markdown',
+    'django_extensions',
+] + get_machina_apps()
+
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+  # ...
+  # Machina
+  'machina.core.context_processors.metadata',
 )
+
+
+
+
+
 
 
 SUIT_CONFIG = {
     'ADMIN_NAME': '医院挂号系统'
 }
+
+
+
+
+
+
 
 
 
@@ -59,15 +82,21 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    # Machina
+    'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
+
 )
 
 ROOT_URLCONF = 'sofeware.urls'
+
+from machina import MACHINA_MAIN_TEMPLATE_DIR
+
 
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),MACHINA_MAIN_TEMPLATE_DIR,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,15 +111,35 @@ TEMPLATES = [
 
 
 
+
+
+
 WSGI_APPLICATION = 'sofeware.wsgi.application'
 
-
+from machina import MACHINA_MAIN_STATIC_DIR
 
 STATICFILES_DIRS=(
     os.path.join(BASE_DIR,"static"),
+    MACHINA_MAIN_STATIC_DIR,
 )
 
 
+
+CACHES = {
+  'default': {
+    'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+  },
+  'machina_attachments': {
+    'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    'LOCATION': '/tmp',
+  }
+}
+
+HAYSTACK_CONNECTIONS = {
+  'default': {
+    'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+  },
+}
 
 
 # Database
