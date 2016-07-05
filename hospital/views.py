@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from hospital.models import news,Doctor,register_note
-from hospital.models import SignupForm
+from hospital.models import SignupForm,timeform
 from django.http import Http404
 from django.contrib.auth import authenticate, login,logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
+import json
+
 
 def index(request):
     news_list=news.objects.all()
@@ -52,6 +54,23 @@ def doctor_home(request):
 	user = request.user.first_name
 	register_note_list=register_note.objects.filter(doctor=Doctor.objects.get(user=request.user))
 	return render(request,'doctor/index.html',{'register_note_list':register_note_list,'user':user})
+
+
+
+
+
+
+def ajax_used_to_select_doctor(request):
+	department = request.GET['department']
+	doctor_list=Doctor.objects.filter(department=department)
+	doctor_name_list = []
+	for obe in doctor_list:
+		doctor_name_list.append(obe.name)
+	return HttpResponse(json.dumps(doctor_name_list)) 
+
+def patient_home(request):
+	return render(request,'patient/home.html',{'form':timeform})
+
 
 
 def logout_view(request):

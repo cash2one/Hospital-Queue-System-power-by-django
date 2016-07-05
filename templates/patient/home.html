@@ -1,0 +1,71 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>医生选择框</title>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery.js' %}"></script>
+    {{ form.media }}
+    <script type="text/javascript">
+        //用来获得option元素中selected属性为true的元素的id
+        function Get_Selected_Id(place){
+            var pro = document.getElementById(place);
+            var Selected_Id = pro.options[pro.selectedIndex].id;
+            //console.log("Get_Selected_Id:"+Selected_Id);  //测试使用
+            return Selected_Id;         //返回selected属性为true的元素的id
+        }
+ 
+        //执行相应的动作，调用相关数据请求函数
+        function Get_Next_Place(){
+            var Selected_Id = Get_Selected_Id('province');   //
+                Get_City_Data(Selected_Id);
+        }
+ 
+        function Get_City_Data(Province_Selected_Id){    //这里的Selected_Id应该是被选中的省份的ID
+//            console.log("Province_Selected_Id:"+Province_Selected_Id);   //测试使用
+            if(Province_Selected_Id == 'Not_data1'){    //如果选择了"Province"选项，则表示重置当前City和Country的选项内容，不会向服务器请求数据
+                $("#city").empty();
+                $("#city").append("<option id='Not_data2'>医生姓名</option>");
+            }else{      //否则就会向服务器请求数据
+                $.getJSON('/getdoctorname/',{'department':Province_Selected_Id},function(City_list){
+//                    console.log(City_list);      //测试使用
+                    Add_city(City_list);    //调用添加城市选项函数
+                });
+            }
+        }
+ 
+
+        function Add_city(City_list){
+            $("#city").empty();
+            $("#city").append("<option id='Not_data2'>医生姓名</option>");
+            //上面的两次清空与两次添加是为了保持级联的一致性
+            for(var index in City_list){  
+                var text = "<option"+" id='"+City_list[index]+"'>"+City_list[index]+"</option>";
+                $("#city").append(text);
+                console.log(text); 
+            }
+        }
+ 
+    </script>
+</head>
+<body>
+<form  action="" method="POST">
+    {% csrf_token %}
+    <p>您要选择医生是:</p>
+    <select id="province" onchange="Get_Next_Place()">
+        <option id="Not_data1">科室</option>
+        <option id="内科" value="内科">内科</option>
+        <option id="外科" value="外科">外科</option>
+    </select>
+    <select id="city">
+        <option id="Not_data2">医生姓名</option>
+    </select>
+
+    <br/>
+        {{ form.as_table }}
+    <input id="submit" type="submit" value="Submit">
+     </form>
+</body>
+</html>

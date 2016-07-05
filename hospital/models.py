@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django import forms
+from datetimewidget.widgets import DateTimeWidget, DateWidget, TimeWidget
 
 # Create your models here.
 class news(models.Model):
@@ -44,6 +45,7 @@ class register_note(models.Model):
 	doctor = models.ForeignKey(Doctor)
 	finish=models.BooleanField(u'完成挂诊',null=False,default=False)
 	time=models.DateField(u'日期',auto_now_add=True)
+	register_time=models.DateTimeField(u'预约时间')
 	def __str__(self):
 		return self.patient.name
 	class Meta:
@@ -51,9 +53,14 @@ class register_note(models.Model):
 		verbose_name_plural='挂诊管理'
 
 
-
 # my form
 
 class SignupForm(forms.Form):
 	username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=100 ,label='用户名',error_messages={'required':u'用户名不能为空'})
 	password = forms.CharField(label='密码',widget=forms.PasswordInput(attrs={'class': 'form-control'}),error_messages={'required':u'密码不能为空'})
+
+
+
+
+class timeform(forms.Form):
+	time = forms.TimeField(widget=TimeWidget(usel10n=True, bootstrap_version=3,))

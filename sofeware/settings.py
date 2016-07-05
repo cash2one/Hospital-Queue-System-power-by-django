@@ -32,6 +32,7 @@ from machina import get_apps as get_machina_apps
 INSTALLED_APPS = [
     'hospital',
     'suit',
+    'bootstrap3',
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +50,8 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'userena',
     'accounts',
+    'userena.contrib.umessages',
+    'datetimewidget'
 ] + get_machina_apps()
 
 
@@ -77,14 +80,14 @@ EMAIL_HOST_PASSWORD = 'yourgmailpassword'
 
 AUTH_PROFILE_MODULE = 'accounts.MyProfile'
 
-USERENA_SIGNIN_REDIRECT_URL = '/accounts/%(username)s/'
+USERENA_SIGNIN_REDIRECT_URL = '/forum/'
 LOGIN_URL = '/accounts/signin/'
 LOGOUT_URL = '/accounts/signout/'
 
 SUIT_CONFIG = {
     'ADMIN_NAME': '医院挂号系统'
 }
-
+USERENA_ACTIVATION_REQUIRED=False
 
 
 
