@@ -44,8 +44,11 @@ class register_note(models.Model):
 	patient = models.ForeignKey(Patient)
 	doctor = models.ForeignKey(Doctor)
 	finish=models.BooleanField(u'完成挂诊',null=False,default=False)
-	time=models.DateField(u'日期',auto_now_add=True)
-	register_time=models.DateTimeField(u'预约时间')
+	time=models.DateField(u'日期')
+	paidui_number=models.IntegerField(u'队列号',null=False)
+	create_time=models.DateTimeField(u'创建日期',auto_now_add=True)
+	after_afternoon=models.BooleanField(u'上午还是下午',null=False,default=False)
+
 	def __str__(self):
 		return self.patient.name
 	class Meta:
@@ -63,4 +66,4 @@ class SignupForm(forms.Form):
 
 
 class timeform(forms.Form):
-	time = forms.TimeField(widget=TimeWidget(usel10n=True, bootstrap_version=3,))
+	time = forms.DateField(widget=DateWidget(usel10n=True, bootstrap_version=3))

@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'userena',
     'accounts',
     'userena.contrib.umessages',
-    'datetimewidget'
+    'datetimewidget',
 ] + get_machina_apps()
 
 

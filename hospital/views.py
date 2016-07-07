@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from hospital.models import news,Doctor,register_note
+from hospital.models import news,Doctor,register_note,Patient
 from hospital.models import SignupForm,timeform
+from accounts.models import MyProfile
 from django.http import Http404
 from django.contrib.auth import authenticate, login,logout
 from django.http import HttpResponseRedirect,HttpResponse
@@ -39,7 +40,7 @@ def signup(request):
 				try:
 					Doctor.objects.get(user=request.user)
 				except:
-					return HttpResponseRedirect('/prhome/')
+					return HttpResponseRedirect('/patient_home/')
 				return HttpResponseRedirect('/home/')
 			else:
 				error.append('密码或用户名错误')
@@ -58,8 +59,6 @@ def doctor_home(request):
 
 
 
-
-
 def ajax_used_to_select_doctor(request):
 	department = request.GET['department']
 	doctor_list=Doctor.objects.filter(department=department)
@@ -69,7 +68,19 @@ def ajax_used_to_select_doctor(request):
 	return HttpResponse(json.dumps(doctor_name_list)) 
 
 def patient_home(request):
-	return render(request,'patient/home.html',{'form':timeform})
+	if request.method == 'POST':
+		department=request.POST['department']
+		doctor_name=request.POST['doctor_name']
+		optionsRadios=request.POST['optionsRadios']
+		yueyu_time=request.POST['time'].replace("/",'-')
+		if optionsRadios=='option1':
+			after_afternoon=False
+		else:
+			after_afternoon=True
+		paidui_number=register_note.objects.filter(doctor=Doctor.objects.get(name=doctor_name),time=yueyu_time,after_afternoon=after_afternoon).count()+1;
+		register_note.objects.create(patient=Patient.objects.get(user=request.user),doctor=Doctor.objects.get(name=doctor_name),time=yueyu_time,after_afternoon=after_afternoon,paidui_number=paidui_number)
+	else:
+		return render(request,'patient/home.html',{'form':timeform})
 
 
 
