@@ -6,6 +6,7 @@ from django.http import Http404
 from django.contrib.auth import authenticate, login,logout
 from django.http import HttpResponseRedirect,HttpResponse
 import json
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -50,7 +51,7 @@ def signup(request):
         'form': signform,'error':error
         })
 
-
+@login_required(login_url='/signup/')
 def doctor_home(request):
 	user = request.user.first_name
 	register_note_list=register_note.objects.filter(doctor=Doctor.objects.get(user=request.user))
@@ -67,6 +68,8 @@ def ajax_used_to_select_doctor(request):
 		doctor_name_list.append(obe.name)
 	return HttpResponse(json.dumps(doctor_name_list)) 
 
+
+@login_required(login_url='/signup/')
 def patient_home(request):
 	if request.method == 'POST':
 		department=request.POST['department']
@@ -79,6 +82,7 @@ def patient_home(request):
 			after_afternoon=True
 		paidui_number=register_note.objects.filter(doctor=Doctor.objects.get(name=doctor_name),time=yueyu_time,after_afternoon=after_afternoon).count()+1;
 		register_note.objects.create(patient=Patient.objects.get(user=request.user),doctor=Doctor.objects.get(name=doctor_name),time=yueyu_time,after_afternoon=after_afternoon,paidui_number=paidui_number)
+		return render(request,'patient/resignsuccess.html',{'patient_name':Patient.objects.get(user=request.user).name,'department':department,'doctor_name':doctor_name,'yueyu_time':yueyu_time,'paidui_number':paidui_number})
 	else:
 		return render(request,'patient/home.html',{'form':timeform})
 

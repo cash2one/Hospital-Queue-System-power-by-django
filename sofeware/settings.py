@@ -77,10 +77,13 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'yourgmailaccount@gmail.com'
 EMAIL_HOST_PASSWORD = 'yourgmailpassword'
 
+USERENA_SIGNIN_AFTER_SIGNUP=True
 
 AUTH_PROFILE_MODULE = 'accounts.MyProfile'
 
-USERENA_SIGNIN_REDIRECT_URL = '/forum/'
+USERENA_SIGNIN_REDIRECT_URL = '/accounts/%(username)s/edit/'
+LOGIN_REDIRECT_URL='/accounts/%(username)s/edit/'
+SIGNUP_REDIRECT_URL='/accounts/%(username)s/edit/'
 LOGIN_URL = '/accounts/signin/'
 LOGOUT_URL = '/accounts/signout/'
 
@@ -90,8 +93,7 @@ SUIT_CONFIG = {
 USERENA_ACTIVATION_REQUIRED=False
 
 
-
-
+USERENA_PROFILE_DETAIL_TEMPLATE='profile.html'
 
 
 
