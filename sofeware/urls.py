@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^forum/', include(board.urls)),
     url(r'^accounts/', include('userena.urls')),
     url(r'^messages/', include('userena.contrib.umessages.urls')),
+    url(r'^summernote/', include('django_summernote.urls')),
 )

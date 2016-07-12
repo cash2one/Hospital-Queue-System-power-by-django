@@ -7,10 +7,12 @@ from django.contrib.auth import authenticate, login,logout
 from django.http import HttpResponseRedirect,HttpResponse
 import json
 from django.contrib.auth.decorators import login_required
-
+from hospital.forms import wenzhen_form
 
 def index(request):
     news_list=news.objects.all()
+    news_list=news_list[::-1]
+    print(request.user.get_group_permissions())
     return render(request,'home/index.html',{'news_list':news_list})
 
 
@@ -54,7 +56,7 @@ def signup(request):
 @login_required(login_url='/signup/')
 def doctor_home(request):
 	user = request.user.first_name
-	register_note_list=register_note.objects.filter(doctor=Doctor.objects.get(user=request.user))
+	register_note_list=register_note.objects.filter(doctor=Doctor.objects.get(user=request.user),finish=False)
 	return render(request,'doctor/index.html',{'register_note_list':register_note_list,'user':user})
 
 
@@ -81,8 +83,8 @@ def patient_home(request):
 		else:
 			after_afternoon=True
 		paidui_number=register_note.objects.filter(doctor=Doctor.objects.get(name=doctor_name),time=yueyu_time,after_afternoon=after_afternoon).count()+1;
-		register_note.objects.create(patient=Patient.objects.get(user=request.user),doctor=Doctor.objects.get(name=doctor_name),time=yueyu_time,after_afternoon=after_afternoon,paidui_number=paidui_number)
-		return render(request,'patient/resignsuccess.html',{'patient_name':Patient.objects.get(user=request.user).name,'department':department,'doctor_name':doctor_name,'yueyu_time':yueyu_time,'paidui_number':paidui_number})
+		register_note.objects.create(patient=MyProfile.objects.get(user=request.user),doctor=Doctor.objects.get(name=doctor_name),time=yueyu_time,after_afternoon=after_afternoon,paidui_number=paidui_number)
+		return render(request,'patient/resignsuccess.html',{'patient_name':MyProfile.objects.get(user=request.user).name,'department':department,'doctor_name':doctor_name,'yueyu_time':yueyu_time,'paidui_number':paidui_number})
 	else:
 		return render(request,'patient/home.html',{'form':timeform})
 
@@ -91,4 +93,49 @@ def patient_home(request):
 def logout_view(request):
     logout(request)
     # Redirect to a success page.
-    return HttpResponseRedirect("/signup/")
+    return HttpResponseRedirect("/")
+
+@login_required(login_url='/signup/')
+def huizhen(request,id):
+	if request.method == 'POST': # 如果表单被提交
+		huizhen=request.POST['foo']
+		detail_id = id
+		register_detail=register_note.objects.get(id=id)
+		register_detail.huizhen=huizhen
+		register_detail.finish=True
+		register_detail.save()
+		return HttpResponseRedirect('/home/')
+	else:
+		detail_id = id
+		register_detail=register_note.objects.get(id=id)
+		register_detail_name=register_detail.patient.name
+		return render(request,'doctor/detail.html',{'detail_id':detail_id,'wenzhen_form':wenzhen_form})
+
+
+@login_required(login_url='/signup/')
+def huizhen_history(request):
+	user = request.user.first_name
+	register_note_list=register_note.objects.filter(doctor=Doctor.objects.get(user=request.user),finish=True)
+	return render(request,'doctor/huizhen_history.html',{'register_note_list':register_note_list,'user':user})
+
+@login_required(login_url='/signup/')
+def huizhen_history_detail(request,id):
+	detail_id = id
+	register_detail=register_note.objects.get(id=id)
+	register_detail_name=register_detail.patient.name
+	return render(request,'doctor/huizhen_history_detail.html',{'register_detail':register_detail,'wenzhen_form':wenzhen_form})
+
+
+@login_required(login_url='/signup/')
+def huizhen_history_patient(request):
+	register_note_list=register_note.objects.filter(patient=MyProfile.objects.get(user=request.user))
+	return render(request,'patient/huizhen_history.html',{'register_note_list':register_note_list})
+
+@login_required(login_url='/signup/')
+def huizhen_history_detail_patient(request,id):
+	detail_id = id
+	register_detail=register_note.objects.get(id=id)
+	register_detail_name=register_detail.patient.name
+	return render(request,'patient/huizhen_history_detail_patient.html',{'register_detail':register_detail,'wenzhen_form':wenzhen_form})
+
+

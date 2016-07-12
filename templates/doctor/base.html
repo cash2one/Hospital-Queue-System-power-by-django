@@ -42,12 +42,12 @@
          <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
            
             <ul class="nav nav-sidebar">
-              <li class="active"><a href="#">总体</a></li>
+              <li class="active"><a href="/home/">总体</a></li>
 
             </ul>
             <ul class="nav nav-sidebar">
               <li><a href="">患者</a></li>
-              <li><a href="">写病历</a></li>
+              <li><a href="/huizheng_history/">查看病历</a></li>
               <li><a href="/forum/">论坛</a></li>
             </ul>
           
@@ -75,7 +75,7 @@
 </footer>
         
   <!-- script references -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
   </body>

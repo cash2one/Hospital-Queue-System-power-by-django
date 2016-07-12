@@ -1,9 +1,9 @@
-{% extends "doctor/base.html" %}
+{% extends "patient/base.html" %}
 {% load staticfiles %}
 
 {% block content %}
 
-          <h2 class="sub-header">今天要问诊的患者</h2>
+          <h2 class="sub-header">病历历史</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -22,7 +22,7 @@
                   <td>{{ register_note.id }}</td>
                   <td>{{ register_note.patient.name }}</td>
                   <td>{{ register_note.time }}</td>
-                  <td><button type="button" class="btn btn-sm btn-default" onclick="window.location.href='/detail/{{ register_note.id }}/'">开始会诊</button></td>                  
+                  <td><button type="button" class="btn btn-sm btn-default" onclick="window.location.href='/huizhen_history_detail_patient/{{ register_note.id }}/'">查看病历</button></td>                  
                 </tr>
                 {% endfor %}
               </tbody>

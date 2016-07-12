@@ -24,5 +24,5 @@ class MyProfile(UserenaBaseProfile):
 	phonenumber = models.CharField(u'手机号',max_length=11,null=True)
 	about_me = models.TextField(_('关于我'), blank=True)
 	class Meta:
-		verbose_name='医生'
-		verbose_name_plural='医生管理'
+		verbose_name='患者'
+		verbose_name_plural='患者管理'

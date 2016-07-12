@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'accounts',
     'userena.contrib.umessages',
     'datetimewidget',
+    'django_summernote',
 ] + get_machina_apps()
 
 
@@ -201,3 +202,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL='../file/'
+
+
+
+
+SUMMERNOTE_CONFIG = {
+'lang': 'zh-CN',
+'external_css': (
+    'css/summernote.css/bootstrap.min.css',
+    ),
+'external_js': (
+    'js/jquery.min.js',
+    'js/bootstrap.min.js',
+    ),
+}

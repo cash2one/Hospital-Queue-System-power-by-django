@@ -1,14 +1,15 @@
 from django.db import models
 from django.contrib import admin
 from django.contrib.auth.models import User
+from accounts.models import MyProfile
 from django import forms
 from datetimewidget.widgets import DateTimeWidget, DateWidget, TimeWidget
 
 # Create your models here.
 class news(models.Model):
     tittle = models.CharField(u'标题',max_length=200)
-    author = models.CharField(u'作者',max_length=20)
-    content = models.CharField(u'内容',max_length=5000)
+    author = models.CharField(u'作者',max_length=20,default='admin')
+    content = models.TextField(u'内容',max_length=5000)
     time=models.DateField(u'日期',auto_now_add=True)
     def __unicode__(self):
     	return self.tittle
@@ -41,13 +42,14 @@ class Patient(models.Model):
 		verbose_name_plural='患者管理'
 
 class register_note(models.Model):
-	patient = models.ForeignKey(Patient)
+	patient = models.ForeignKey(MyProfile)
 	doctor = models.ForeignKey(Doctor)
 	finish=models.BooleanField(u'完成挂诊',null=False,default=False)
 	time=models.DateField(u'日期')
 	paidui_number=models.IntegerField(u'队列号',null=False)
 	create_time=models.DateTimeField(u'创建日期',auto_now_add=True)
 	after_afternoon=models.BooleanField(u'上午还是下午',null=False,default=False)
+	huizhen=models.TextField()
 
 	def __str__(self):
 		return self.patient.name
