@@ -8,10 +8,11 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>id</th>
                   <th>姓名</th>
                   <th>时间</th>
-                  <th>控制</th>
+                  <th>年龄</th>
+                  <th>性别</th>
+                  <th>查看</th>
                 </tr>
               </thead>
               <tbody>
@@ -19,9 +20,14 @@
 
                 {% for register_note in register_note_list %}
                 <tr>
-                  <td>{{ register_note.id }}</td>
                   <td>{{ register_note.patient.name }}</td>
                   <td>{{ register_note.time }}</td>
+                  <td>{{ register_note.patient.age }}</td>
+                  {% if register_note.patient.gender == 1 %}
+                  <td>男</td>
+                  {% else %}
+                  <td>女</td>
+                  {% endif %}
                   <td><button type="button" class="btn btn-sm btn-default" onclick="window.location.href='/huizhen_history_detail/{{ register_note.id }}/'">查看病历</button></td>                  
                 </tr>
                 {% endfor %}

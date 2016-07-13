@@ -26,3 +26,5 @@ class MyProfile(UserenaBaseProfile):
 	class Meta:
 		verbose_name='患者'
 		verbose_name_plural='患者管理'
+	def __str__(self):
+		return self.name

@@ -1,0 +1,28 @@
+{% extends "doctor/base.html" %}
+{% load staticfiles %}
+
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+          <h2 class="sub-header">病历详情</h2>
+          <div>
+{% if register_detail %}
+{% for content in register_detail%}
+
+<blockquote>
+  <footer><cite title="Source Title">{{ content.time }}</cite></footer>
+  <p>{{ content.huizhen|safe }}</p>
+
+</blockquote>
+<br />
+
+{% endfor %}
+{% else %}
+<p>没有病历历史</p>
+{% endif%}
+</div>
+
+ {% endblock %}
+     

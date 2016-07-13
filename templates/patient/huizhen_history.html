@@ -8,10 +8,12 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>id</th>
-                  <th>姓名</th>
+                  <th>科室</th>
+                  <th>诊断医生</th>
                   <th>时间</th>
-                  <th>控制</th>
+                  <th>队列号</th>
+                  <th>是否已完成</th>
+                  <th>查看详情</th>
                 </tr>
               </thead>
               <tbody>
@@ -19,10 +21,18 @@
 
                 {% for register_note in register_note_list %}
                 <tr>
-                  <td>{{ register_note.id }}</td>
-                  <td>{{ register_note.patient.name }}</td>
+                  <td>{{ register_note.doctor.department }}</td>
+                  <td>{{ register_note.doctor.name }}</td>
                   <td>{{ register_note.time }}</td>
-                  <td><button type="button" class="btn btn-sm btn-default" onclick="window.location.href='/huizhen_history_detail_patient/{{ register_note.id }}/'">查看病历</button></td>                  
+                  <td>{{ register_note.paidui_number }}</td>
+                  {% if register_note.finish %}
+                  <td>完成</td>
+                                    <td><button type="button" class="btn btn-sm btn-default" onclick="window.location.href='/huizhen_history_detail_patient/{{ register_note.id }}/'">查看病历</button></td>   
+                  {% else %}
+                  <td>未完成</td>
+                  <td>当前等待号：{{department__num}}</td>
+                  {% endif %}
+               
                 </tr>
                 {% endfor %}
               </tbody>

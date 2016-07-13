@@ -49,15 +49,15 @@ def signup(request):
 				error.append('密码或用户名错误')
 	else:
 		signform = SignupForm() #获得表单对象
+	print(error)
 	return render(request,'doctor/login_doctor.html', {
         'form': signform,'error':error
         })
 
 @login_required(login_url='/signup/')
 def doctor_home(request):
-	user = request.user.first_name
 	register_note_list=register_note.objects.filter(doctor=Doctor.objects.get(user=request.user),finish=False)
-	return render(request,'doctor/index.html',{'register_note_list':register_note_list,'user':user})
+	return render(request,'doctor/index.html',{'register_note_list':register_note_list})
 
 
 
@@ -71,8 +71,18 @@ def ajax_used_to_select_doctor(request):
 	return HttpResponse(json.dumps(doctor_name_list)) 
 
 
+
+def ajax_used_to_doctor_content(request):
+	department = request.GET['id']
+	print(department)
+	doctor_content=Doctor.objects.get(name=department).content
+	return HttpResponse(json.dumps(doctor_content)) 
+
+
+
 @login_required(login_url='/signup/')
 def patient_home(request):
+	patient=MyProfile.objects.get(user=request.user)
 	if request.method == 'POST':
 		department=request.POST['department']
 		doctor_name=request.POST['doctor_name']
@@ -127,9 +137,23 @@ def huizhen_history_detail(request,id):
 
 
 @login_required(login_url='/signup/')
+def huizhen_history_detail_index(request,id):
+	detail_id = id
+	register_detail=register_note.objects.get(id=id)
+	register_detail_list=register_note.objects.filter(doctor=register_detail.doctor,patient=register_detail.patient,finish=True)
+	print(register_detail_list)
+	return render(request,'doctor/huizhen_history_detail_index.html',{'register_detail':register_detail_list,'wenzhen_form':wenzhen_form})
+
+
+@login_required(login_url='/signup/')
 def huizhen_history_patient(request):
-	register_note_list=register_note.objects.filter(patient=MyProfile.objects.get(user=request.user))
-	return render(request,'patient/huizhen_history.html',{'register_note_list':register_note_list})
+	register_note_list=register_note.objects.filter(patient=MyProfile.objects.get(user=request.user)).order_by('time')[::-1]
+	try:
+		register_note_list_line=register_note.objects.get(patient=MyProfile.objects.get(user=request.user),finish=False)
+		department__num=register_note.objects.get(finish=True,doctor=register_note_list_line.doctor,time=register_note_list_line.time).count()
+	except:
+		department__num=1
+	return render(request,'patient/huizhen_history.html',{'register_note_list':register_note_list,'department__num':department__num})
 
 @login_required(login_url='/signup/')
 def huizhen_history_detail_patient(request,id):

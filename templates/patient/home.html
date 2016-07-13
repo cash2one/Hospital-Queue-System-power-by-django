@@ -42,10 +42,39 @@
                 console.log(text); 
             }
         }
+
+        function Get_Selected_Id2(place){
+            var pro = document.getElementById(place);
+            var Selected_Id = pro.options[pro.selectedIndex].value;
+            //console.log("Get_Selected_Id:"+Selected_Id);  //测试使用
+            return Selected_Id;         //返回selected属性为true的元素的id
+        }
+ 
+
+        function get_content(){
+            var Selected_Id = Get_Selected_Id2('city');   //
+                console.log(Selected_Id);      //测试使用
+                Get_doctor_Data(Selected_Id);
+        }
+
+
+       function Get_doctor_Data(Doctor_Selected_Id){    //这里的Selected_Id应该是被选中的省份的ID
+//            console.log("Province_Selected_Id:"+Province_Selected_Id);   //测试使用
+            if(Doctor_Selected_Id == 'Not_data2'){    //如果选择了"Province"选项，则表示重置当前City和Country的选项内容，不会向服务器请求数据
+                $("#content").empty();
+                $("#content").html("");
+            }else{      //否则就会向服务器请求数据
+                $.getJSON('/getdoctorcontent/',{'id':Doctor_Selected_Id},function(City_list){
+//                    console.log(City_list);      //测试使用
+                    $("#content").html(City_list);
+                });
+            }
+        }
  
     </script>
 
 {% endblock %}
+
 
 
 {% block content %}
@@ -58,7 +87,7 @@
         <option id="内科" value="waike">内科</option>
         <option id="外科" value="neike">外科</option>
     </select>
-    <select id="city" name="doctor_name">
+    <select id="city" name="doctor_name" onchange="get_content()">
         <option id="Not_data2">医生姓名</option>
     </select>
 
@@ -81,4 +110,9 @@
 
     <input id="submit" type="submit" value="Submit">
      </form>
+
+     <p id="content">
+         
+
+     </p>
 {% endblock %}

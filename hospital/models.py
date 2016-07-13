@@ -23,6 +23,7 @@ class Doctor(models.Model):
 	workid = models.CharField(u'工号',max_length=10)
 	department = models.CharField(u'科室',max_length=11)
 	phonenumber = models.CharField(u'手机号',max_length=11)
+	content= models.TextField(u'个人简历')
 	def __str__(self):
 		return '姓名'+self.name+'工号'+self.workid
 	class Meta:
